@@ -17,7 +17,10 @@ MSAT=lr
 CFLAGS+=-I./src/minisat
 LIBS+=-lminisat
 
-all: satmake app.exe
+all: ./debug satmake app.exe
+
+./debug:
+	mkdir ./debug
 
 satmake:
 	@cd ./src/minisat ; make CXX=$(CXX) $(MSAT)
@@ -36,7 +39,7 @@ app.exe:  $(COBJS)
 #	$(CXX) $(CFLAGS) -ggdb -c $<
 	
 #	for test
-	$(CXX) $(CFLAGS) -DNDEBUG -c -o $@ $<
+	$(CXX) $(CFLAGS) -DNDEBUG -c -o ./$@ $<
 	
 
 	
