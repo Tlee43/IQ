@@ -25,25 +25,6 @@ extern QAigFla qcir_qfla;
 extern unordered_map<const char*,int,cstrHash,cstrEq> name2var;
 
 
-std::set<int> getVars(AigLit l){
-	if(factory.is_true(l)) return std::set<int>();
-	if(factory.is_false(l)) return std::set<int>();
-	if (l.is_var()) return std::set<int> {l.var()};
-	const auto ptr = l.ptr();
-	const AigNode node = factory.get_node(ptr);
-	std::set<int> combinedVars;
-	std::set<int> left = getVars(node.a());
-	std::set<int> right = getVars(node.b());
-	for (int v : left){
-		combinedVars.insert(v);
-	}
-	for (int v: right){
-			combinedVars.insert(v);
-		}
-	return combinedVars;
-}
-
-
 inline pair<Prefix, AigLit> run_cnf(string filename){
     return loadQBFFromFile(filename, factory);
 }
