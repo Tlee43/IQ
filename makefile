@@ -3,7 +3,8 @@ CC=g++
 MSAT=ld
 
 CSRCS    = $(wildcard ./src/*.cpp)
-COBJS    = $(CSRCS:./src/%.cpp=./debug/%.o)
+YACC     = $(wildcard ./src/*.c)
+COBJS    = $(CSRCS:./src/%.cpp=./debug/%.o) $(YACC:./src/%.c=./debug/%.o)
 LIBD =
 LIBS =
 CXX?=g++
@@ -40,6 +41,10 @@ app.exe:  $(COBJS)
 	
 #	for test
 	$(CXX) $(CFLAGS) -DNDEBUG -c -o ./$@ $<
+	
+%.o:  ../src/%.c
+	@echo Compiling: $@
+	@$(CXX) $(CFLAGS) -DNDEBUG -c -o $@ $<
 	
 
 	
