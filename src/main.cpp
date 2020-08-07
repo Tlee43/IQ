@@ -18,6 +18,68 @@
 using namespace std;
 using namespace SATSPC;
 
+AigFactory factory;
+void read_qcir(string filename);
+extern int qcir_line;
+extern QAigFla qcir_qfla;
+extern unordered_map<const char*,int,cstrHash,cstrEq> name2var;
+
+
+std::set<int> getVars(AigLit l){
+	if(factory.is_true(l)) return std::set<int>();
+	if(factory.is_false(l)) return std::set<int>();
+	if (l.is_var()) return std::set<int> {l.var()};
+	const auto ptr = l.ptr();
+	const AigNode node = factory.get_node(ptr);
+	std::set<int> combinedVars;
+	std::set<int> left = getVars(node.a());
+	std::set<int> right = getVars(node.b());
+	for (int v : left){
+		combinedVars.insert(v);
+	}
+	for (int v: right){
+			combinedVars.insert(v);
+		}
+	return combinedVars;
+}
+
+
+inline pair<Prefix, AigLit> run_cnf(string filename){
+    return loadQBFFromFile(filename, factory);
+}
+
+
+//this function makes sure the quantifiers alternate properly -- I think
+void normalize_prefix(Prefix& p) {
+    if (p.empty()) {
+        p.push_back(Quantification(EXISTENTIAL, VarVector()));
+        return;
+    }
+    size_t last = 0;// maitain the first quantifier
+    for (size_t i = 1; i < p.size(); ++i) {
+        auto& vs_i = p[i].second;
+        if (vs_i.empty()) continue;
+        if (p[i].first == p[last].first) {
+            auto& vs_last = p[last].second;
+            vs_last.insert(vs_last.end(), vs_i.begin(), vs_i.end());
+        } else {
+            ++last;
+            if (last != i) p[last] = p[i];
+        }
+    }
+    size_t new_sz = last+1;
+    p.resize(new_sz);
+}
+
+
+inline pair<Prefix, AigLit> run_qcir(string filename){
+	read_qcir(filename);
+	normalize_prefix(qcir_qfla.pref);
+	return pair<Prefix, AigLit>(qcir_qfla.pref, qcir_qfla.matrix);
+	//factory.print(cerr<<"read:\n", qcir_qfla.matrix)<<endl;
+	//ps=new QSolver(qcir_qfla,options,factory);
+}
+
 
 int main(int argc, char** argv) {
 
@@ -28,10 +90,13 @@ int main(int argc, char** argv) {
 
     string filename = argv[1];
 
-	AigFactory factory;
+    pair<Prefix, AigLit> p;
 
-	//cout << filename << endl;
-    pair<Prefix, AigLit> p = loadQBFFromFile(filename, factory);
+    if (ends_with(filename, ".qcnf") || ends_with(filename, ".qdimacs")) {
+           p = run_cnf(filename);
+    } else {
+           p = run_qcir(filename);
+    }
 
 	int maxvar = 0;
 	for (Quantification q : p.first){
@@ -55,6 +120,8 @@ int main(int argc, char** argv) {
 		 << ", " << solver->getNoOfRefinements() << ", " << solver->getNoOfStratRefinements() << "]" << endl;
 
 	delete solver;
+
+
 
 	//cout << "done" << endl;
 
