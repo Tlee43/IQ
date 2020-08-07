@@ -42,9 +42,10 @@ app.exe:  $(COBJS)
 #	for test
 	$(CXX) $(CFLAGS) -DNDEBUG -c -o ./$@ $<
 	
-%.o:  ../src/%.c
+./debug/%.o:  ./src/%.c
 	@echo Compiling: $@
 	@$(CXX) $(CFLAGS) -DNDEBUG -c -o $@ $<
+	
 	
 
 	
