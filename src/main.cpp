@@ -1,3 +1,7 @@
+//This code, IQFUN, was writen by Tom Lee and uses the QFUN code by 
+//for many of the baseline functions. You can identify the QFUN code
+//by the header at the top of the file.
+
 #include <chrono>
 #include <iostream>
 #include <iterator>
