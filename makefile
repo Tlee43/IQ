@@ -18,7 +18,7 @@ MSAT=lr
 CFLAGS+=-I./src/minisat
 LIBS+=-lminisat
 
-all: ./debug satmake app.exe
+all: ./debug satmake iq.exe
 
 ./debug:
 	mkdir ./debug
@@ -26,7 +26,7 @@ all: ./debug satmake app.exe
 satmake:
 	@cd ./src/minisat ; make CXX=$(CXX) $(MSAT)
 	
-app.exe:  $(COBJS)
+iq.exe:  $(COBJS)
 	@echo Linking: $@
 #	for debug
 #	$(CXX) -ggdb -o $@ $(COBJS) $(LIBD) $(LIBS) -lz #-lstdc++fs
