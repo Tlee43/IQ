@@ -24,8 +24,8 @@ The IQ solver takes QBF in either the qcir or qdimacs format, to run it on a giv
 ./iq yourQBF.qcir
 ```
 
-This will return a array of four numbers corresponding to the calculated truth value of the QBF, time 
-taken to solve the QBF, the number of top level refinments and the number of top level strategy 
+This will return an array of four numbers corresponding to the calculated truth value of the QBF, time 
+taken to solve the QBF, the number of top level refinements and the number of top level strategy 
 refinements.
 
 # Licence
