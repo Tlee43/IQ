@@ -2,12 +2,13 @@
 
 This code is an implementation of the IQ solver: designed by Tom Lee, Viktor Toth and Sean Holden.
 The code uses some of the code of the QFUN implemetation written by Mikolas Janota, which can be 
-found at http://sat.inesc-id.pt/~mikolas/sw/qfun/. Where code is copied the top of the file will
-have a comment displaying it has been copied.
+found at http://sat.inesc-id.pt/~mikolas/sw/qfun/. Where code has been copied the top of the code's
+file will have a comment displaying it has been copied.
 
 # Build
 
-To download the IQ solver run the following comands.
+To build the IQ solver, you need to have the following packages installed... . Then, if you have all 
+the packages, run the following comands.
 
 ```bash
 git clone 
