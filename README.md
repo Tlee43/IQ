@@ -11,7 +11,7 @@ To build the IQ solver, you need to have the following packages installed... . T
 the packages, run the following comands.
 
 ```bash
-git clone 
+git clone https://github.com/Tlee43/IQ.git
 cd IQ
 make
 ```
