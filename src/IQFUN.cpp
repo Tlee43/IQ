@@ -197,15 +197,25 @@ pair<bool, unordered_map<Var, AigLit>> nIQFUN::win(){
 
 			if(calc_counterMove(candidate, counter, games[l], (prefix.size() == 2 ? counterMoveSolvers[l] : nullptr), used, mavvarofCounter)){
 
-				//do blocking, probs should pt this in another function
+				//do blocking, probs should put this in another function (updated as was wrong when prefix is universal)
 				if (blocking <= prefix.size()){
-				    AigLit blockclause = factory.mk_false();
-				    for(int v : prefix[0].second){
-					    if(used.find(v) != used.end()){
-						    blockclause = factory.mk_or(blockclause, (candidate[v].is_true() ? factory.mk_var(v, true) : factory.mk_var(v, false)));
-					    }
-				    }
-				    abstraction_solver->addGame(blockclause, abstraction_solver->getNextFreeVar()-1);
+					AigLit blockclause;
+					if (prefix[0].first == EXISTENTIAL){
+				        blockclause = factory.mk_false();
+				        for(int v : prefix[0].second){
+					        if(used.find(v) != used.end()){
+						        blockclause = factory.mk_or(blockclause, (candidate[v].is_true() ? factory.mk_var(v, true) : factory.mk_var(v, false)));
+					        }
+				        }
+				    }else{
+						blockclause = factory.mk_true();
+						for(int v : prefix[0].second){
+						    if(used.find(v) != used.end()){
+							    blockclause = factory.mk_and(blockclause, (candidate[v].is_true() ? factory.mk_var(v, false) : factory.mk_var(v, true)));
+							}
+						}
+					}
+					abstraction_solver->addGame(blockclause, abstraction_solver->getNextFreeVar()-1);
 				}
 
 				noCounterMove = false;
