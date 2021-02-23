@@ -160,7 +160,7 @@ pair<bool, unordered_map<Var, AigLit>> nIQFUN::win(){
 			}
 		}
 		abstraction_solver = new nIQFUN(factory, abs_prefix, vector<AigLit>(1, (prefix[0].first == EXISTENTIAL ? factory.mk_true() : factory.mk_false())),
-				refreshFrequency, hasLearntBound, maxvar); //to save compute time maxvar could be nextFreeVar-1 but this could lead to worse general performance
+				refreshFrequency, hasLearntBound, maxvar, blocking); //to save compute time maxvar could be nextFreeVar-1 but this could lead to worse general performance
 	}else{
 		abstraction_solver = new BaseIQFUN(factory, vector<Quantification>(1, prefix[0]),
 				vector<AigLit>(1, (prefix[0].first == EXISTENTIAL ? factory.mk_true() : factory.mk_false())), refreshFrequency, hasLearntBound, maxv(prefix[0].second));
