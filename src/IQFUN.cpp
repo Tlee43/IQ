@@ -330,7 +330,7 @@ inline bool nIQFUN::calc_counterMove(unordered_map<Var, AigLit>& candidate, unor
        	unordered_map<Var,Var> refresh;
 		unique_ptr<stratSubstitute> sub(new stratSubstitute(factory, candidate, refresh, nextFreeVar));
 		Prefix InnerQuantifiers = Prefix(prefix.begin()+1, prefix.end());
-		IQFUN* counterMoveSolver = new nIQFUN(factory, InnerQuantifiers, vector<AigLit>(1, ((*sub)(game))), refreshFrequency, hasLearntBound, maxvar);
+		IQFUN* counterMoveSolver = new nIQFUN(factory, InnerQuantifiers, vector<AigLit>(1, ((*sub)(game))), refreshFrequency, hasLearntBound, maxvar, blocking);
 		pair<bool, unordered_map<Var, AigLit>> solution = counterMoveSolver->win();
 		delete counterMoveSolver;
 
